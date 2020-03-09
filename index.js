@@ -25,16 +25,15 @@ app.get(
 // STEP 6.5: build an endpoint [GET] "/users" and returns ALL users in the database
 // we will take advantage of the "find" helper from the db.js file inside of data
 app.get("/api/users", (req, res) => {
-  helpers.find()
+  helpers
+    .find()
     .then(users => {
       res.status(200).json({ users });
     })
     .catch(err => {
-      res
-        .status(500)
-        .json({
-          errorMessage: "The users information could not be retrieved."
-        });
+      res.status(500).json({
+        errorMessage: "The users information could not be retrieved."
+      });
     });
 });
 // STEP 6.6 build and endpoint [GET] "/users/:id"
@@ -86,12 +85,10 @@ app.post("/api/users", (req, res) => {
           .status(400)
           .json({ errorMessage: "Please provide name and bio for the user." });
       } else {
-        res
-          .status(500)
-          .json({
-            errorMessage:
-              "There was an error while saving the user to the database"
-          });
+        res.status(500).json({
+          errorMessage:
+            "There was an error while saving the user to the database"
+        });
       }
     });
 });
@@ -101,7 +98,7 @@ app.put("/api/users/:id", (req, res) => {
   const payload = req.body;
   helpers
     .update(id, payload)
-    .then(async (user) => {
+    .then(async user => {
       if (!user) {
         res
           .status(404)
@@ -130,15 +127,17 @@ app.delete("/api/users/:id", (req, res) => {
   helpers
     .remove(id)
     .then(user => {
-        if (!user) {
-            res.status(404).json({ message: "The user with the specified ID does not exist." })
-        } else {
-            console.log(user);
-            res.status(200).json({ message: "deleted" });
-        }
+      if (!user) {
+        res
+          .status(404)
+          .json({ message: "The user with the specified ID does not exist." });
+      } else {
+        console.log(user);
+        res.status(200).json({ message: "deleted" });
+      }
     })
     .catch(err => {
-      res.status(500).json({ errorMessage: "The user could not be removed"})
+      res.status(500).json({ errorMessage: "The user could not be removed" });
     });
 });
 

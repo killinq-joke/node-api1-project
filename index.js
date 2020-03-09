@@ -23,12 +23,17 @@ app.get('/hello', (
 })
 // STEP 6.5: build an endpoint [GET] "/users" and returns ALL users in the database
 // we will take advantage of the "find" helper from the db.js file inside of data
-app.get('/api/users', async (req, res) => {
-  const users = await helpers.find()
-  console.log(users);
-  res
-    .status(200)
-    .json({ users })
+app.get('/api/users', (req, res) => {
+  helpers.find()
+  .then(users => {
+      res
+        .status(200)
+        .json({ users })
+  })
+  .catch(err => {
+      res.status(500).json({ errorMessage: "The users information could not be retrieved." })
+  })
+  
 })
 // STEP 6.6 build and endpoint [GET] "/users/:id"
 // sends back the user with the given id
@@ -52,7 +57,7 @@ app.get("/api/users/:id", (req, res) => {
       // if we res.json twice, that'll be an error
     })
     .catch(error => {
-      console.log(error);
+        console.log(err)
     })
   // the id can be found inside req.params.id
 })

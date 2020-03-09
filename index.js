@@ -64,13 +64,18 @@ app.post('/api/users', (req, res) => {
   // axios.post('http://localhost:3333/users', user).then().catch()
     const payload = req.body
     helpers.insert(payload)
-    .then(res => {
-        res
-        .status(200)
-        .json(user)
+    .then(async (id) => {
+            const users = await helpers.find()
+            res
+            .status(201)
+            .json({users})
     })
     .catch(err => {
-        console.log(err)
+        if (!payload.hasOwnProperty("bio") || !payload.hasOwnProperty("name")) {
+            res.status(400).json({ errorMessage: "Please provide name and bio for the user." })
+        } else {
+        res.status(500).json({ errorMessage: "There was an error while saving the user to the database" })
+        }
     })
 })
 

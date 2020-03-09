@@ -25,8 +25,7 @@ app.get(
 // STEP 6.5: build an endpoint [GET] "/users" and returns ALL users in the database
 // we will take advantage of the "find" helper from the db.js file inside of data
 app.get("/api/users", (req, res) => {
-  helpers
-    .find()
+  helpers.find()
     .then(users => {
       res.status(200).json({ users });
     })
@@ -128,15 +127,18 @@ app.put("/api/users/:id", (req, res) => {
 
 app.delete("/api/users/:id", (req, res) => {
   const { id } = req.params;
-  const payload = req.body;
   helpers
     .remove(id)
     .then(user => {
-      console.log(user);
-      res.status(200).json({ message: "deleted" });
+        if (!user) {
+            res.status(404).json({ message: "The user with the specified ID does not exist." })
+        } else {
+            console.log(user);
+            res.status(200).json({ message: "deleted" });
+        }
     })
     .catch(err => {
-      console.log(err);
+      res.status(500).json({ errorMessage: "The user could not be removed"})
     });
 });
 

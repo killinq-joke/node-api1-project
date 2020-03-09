@@ -44,7 +44,7 @@ app.get("/api/users/:id", (req, res) => {
   helpers.findById(id)
     .then(user => {
       if (!user) {
-        res.status(404).json({ message: 'No user with id ' + id })
+        res.status(404).json({ message: "The user with the specified ID does not exist." })
       } else {
         console.log(user)
         res.status(200).json(user)
@@ -57,7 +57,7 @@ app.get("/api/users/:id", (req, res) => {
       // if we res.json twice, that'll be an error
     })
     .catch(error => {
-        console.log(err)
+        res.status(500).json({ errorMessage: "The user information could not be retrieved."})
     })
   // the id can be found inside req.params.id
 })
